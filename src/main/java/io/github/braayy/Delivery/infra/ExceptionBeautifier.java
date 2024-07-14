@@ -8,7 +8,6 @@ import io.github.braayy.Delivery.dto.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -27,13 +26,6 @@ public class ExceptionBeautifier {
 
     @ExceptionHandler({AuthenticationException.class, JWTCreationException.class})
     public ResponseEntity<ApiResponse<Void>> authentication(Exception exception) {
-        exception.printStackTrace();
-
-        return ApiResponse.errorResponse(HttpStatus.UNAUTHORIZED, exception.getMessage());
-    }
-
-    @ExceptionHandler({JWTVerificationException.class, MissingClaimException.class, InvalidClaimException.class})
-    public ResponseEntity<ApiResponse<Void>> authorization(Exception exception) {
         exception.printStackTrace();
 
         return ApiResponse.errorResponse(HttpStatus.UNAUTHORIZED, exception.getMessage());
