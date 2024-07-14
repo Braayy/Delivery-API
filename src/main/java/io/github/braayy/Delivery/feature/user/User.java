@@ -38,6 +38,10 @@ public class User implements UserDetails {
     @Setter
     private UserRole role;
 
+    @Setter
+    @NonNull
+    private Boolean active;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + this.role.name()));

@@ -74,7 +74,7 @@ public class UserController {
     public ResponseEntity<Void> delete(
         @PathVariable Long id
     ) {
-        this.userService.deleteById(id);
+        this.userService.deactivate(id);
 
         return ResponseEntity.noContent().build();
     }

@@ -27,6 +27,7 @@ public class UserService implements UserDetailsService {
             .email(dto.email())
             .password(this.passwordEncoder.encode(dto.password()))
             .role(dto.role())
+            .active(true)
             .build();
 
         return this.userRepository.save(user);
@@ -37,7 +38,7 @@ public class UserService implements UserDetailsService {
     }
 
     public Page<User> listAll(Pageable pageable) {
-        return this.userRepository.findAll(pageable);
+        return this.userRepository.findAllByActiveTrue(pageable);
     }
 
     public User update(Long userId, UpdateUserDTO dto) {
@@ -58,7 +59,8 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    public void deleteById(Long userId) {
-        this.userRepository.deleteById(userId);
+    public void deactivate(Long userId) {
+        User user = this.userRepository.getReferenceById(userId);
+        user.setActive(false);
     }
 }
