@@ -42,7 +42,7 @@ public class ExceptionBeautifier {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse<Void>> validation(MethodArgumentNotValidException exception) {
         List<String> errors = exception.getFieldErrors().stream()
-            .map((error) -> "\"%s\" is invalid: \"%s\"".formatted(error.getField(), error.getDefaultMessage()))
+            .map((error) -> "'%s' is invalid: '%s'".formatted(error.getField(), error.getDefaultMessage()))
             .toList();
 
         return ApiResponse.errorResponse(HttpStatus.BAD_REQUEST, errors);
