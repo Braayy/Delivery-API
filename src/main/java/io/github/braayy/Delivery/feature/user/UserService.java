@@ -1,5 +1,8 @@
 package io.github.braayy.Delivery.feature.user;
 
+import io.github.braayy.Delivery.feature.user.dto.RegisterUserDTO;
+import io.github.braayy.Delivery.feature.user.dto.UpdateUserDTO;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,6 +38,10 @@ public class UserService implements UserDetailsService {
 
     public User getById(Long userId) {
         return this.userRepository.getReferenceById(userId);
+    }
+
+    public User getByEmail(String userEmail) {
+        return this.userRepository.findByEmail(userEmail).orElseThrow(() -> new EntityNotFoundException("User with email " + userEmail + " could not be found"));
     }
 
     public Page<User> listAll(Pageable pageable) {

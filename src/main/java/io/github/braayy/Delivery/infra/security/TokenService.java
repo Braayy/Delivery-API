@@ -31,7 +31,7 @@ public class TokenService {
         Algorithm algo = Algorithm.HMAC256(secret);
         return JWT.create()
             .withIssuer(this.issuer)
-            .withSubject(user.getEmail())
+            .withSubject(user.getId().toString())
             .withClaim("role", user.getRole().name())
             .withExpiresAt(Instant.now().plus(2, ChronoUnit.HOURS))
             .sign(algo);
@@ -45,13 +45,13 @@ public class TokenService {
             .verify(token);
     }
 
-    public String getSubject(DecodedJWT jwt) {
-        String subject = jwt.getSubject();
-        if (subject == null) {
+    public Long getSubject(DecodedJWT jwt) {
+        String subjectString = jwt.getSubject();
+        if (subjectString == null) {
             throw new MissingClaimException("Received JWT doesn't claim a subject!");
         }
 
-        return subject;
+        return Long.valueOf(subjectString);
     }
 
     public UserRole getUserRole(DecodedJWT jwt) {

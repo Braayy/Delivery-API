@@ -33,7 +33,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         try {
             getRequestToken(request).ifPresent((token) -> {
                 DecodedJWT jwt = this.tokenService.verifyToken(token);
-                String subject = this.tokenService.getSubject(jwt);
+                Long subject = this.tokenService.getSubject(jwt);
                 UserRole role = this.tokenService.getUserRole(jwt);
 
                 UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(subject, null, List.of(role.getAuthority()));

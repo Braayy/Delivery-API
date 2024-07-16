@@ -1,4 +1,7 @@
-package io.github.braayy.Delivery.feature.user;
+package io.github.braayy.Delivery.feature.user.dto;
+
+import io.github.braayy.Delivery.feature.user.User;
+import io.github.braayy.Delivery.feature.user.UserRole;
 
 public record ListUserDTO(
     Long id,

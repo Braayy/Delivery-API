@@ -1,4 +1,4 @@
-package io.github.braayy.Delivery.feature.user;
+package io.github.braayy.Delivery.feature.user.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;

@@ -1,6 +1,11 @@
 package io.github.braayy.Delivery.feature.user;
 
 import io.github.braayy.Delivery.dto.ApiResponse;
+import io.github.braayy.Delivery.feature.user.dto.ListUserDTO;
+import io.github.braayy.Delivery.feature.user.dto.RegisterUserDTO;
+import io.github.braayy.Delivery.feature.user.dto.ShowUserDTO;
+import io.github.braayy.Delivery.feature.user.dto.UpdateUserDTO;
+import io.github.braayy.Delivery.feature.user.security.UserSecurityService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -19,6 +26,7 @@ import java.net.URI;
 public class UserController {
 
     private final UserService userService;
+    private final UserSecurityService securityService;
 
     @PostMapping
     @Transactional
@@ -26,8 +34,8 @@ public class UserController {
         @Valid @RequestBody RegisterUserDTO body,
         UriComponentsBuilder uriBuilder
     ) {
-        if (body.role() == UserRole.CLIENT) {
-            throw new IllegalArgumentException("To register clients use POST /clients");
+        if (body.role() != UserRole.CLIENT) {
+            this.securityService.throwIsNotAdmin(new BadCredentialsException("Only users with role ADMIN can register users with role CASHIER or ADMIN"));
         }
 
         User user = this.userService.register(body);
@@ -41,6 +49,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @securityService.canAccess(authentication, #id)")
     public ResponseEntity<ApiResponse<ShowUserDTO>> show(
         @PathVariable Long id
     ) {
@@ -60,6 +69,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     @Transactional
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @securityService.canAccess(authentication, #id)")
     public ResponseEntity<ApiResponse<ShowUserDTO>> update(
         @PathVariable Long id,
         @Valid @RequestBody UpdateUserDTO body
@@ -71,6 +81,7 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     @Transactional
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @securityService.canAccess(authentication, #id)")
     public ResponseEntity<Void> delete(
         @PathVariable Long id
     ) {
