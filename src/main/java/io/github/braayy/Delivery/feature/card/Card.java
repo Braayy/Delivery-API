@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Getter
 @ToString
 public class Card {
 
@@ -18,7 +19,11 @@ public class Card {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @NonNull
     private User user;
+
+    @Setter
+    private String nickname;
 
     @Setter
     @NonNull
