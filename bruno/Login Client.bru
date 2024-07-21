@@ -1,0 +1,18 @@
+meta {
+  name: Login Client
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://localhost:8080/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "fabin@pizzaboa.net",
+    "password": "senha123"
+  }
+}

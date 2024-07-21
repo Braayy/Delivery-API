@@ -25,7 +25,7 @@ import java.net.URI;
 public class AddressController {
 
     private final AddressService addressService;
-    private final AddressSecurityService securityService;
+    private final AddressSecurityService addressSecurityService;
 
     @PostMapping
     @Transactional
@@ -34,7 +34,7 @@ public class AddressController {
         @RequestParam(required = false) Long user,
         UriComponentsBuilder uriBuilder
     ) {
-        Long ownerId = this.securityService.getAddressOwnerId(user);
+        Long ownerId = this.addressSecurityService.getAddressOwnerId(user);
 
         Address address = this.addressService.register(registerAddressDTO, ownerId);
 
@@ -47,7 +47,7 @@ public class AddressController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN') or @securityService.canUpdate(authentication, #id)")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @addressSecurityService.canAccess(authentication, #id)")
     public ResponseEntity<ApiResponse<ShowAddressDTO>> show(
         @PathVariable Long id
     ) {
@@ -61,15 +61,16 @@ public class AddressController {
         @PageableDefault Pageable pageable,
         @RequestParam(required = false) Long user
     ) {
-        Long ownerId = this.securityService.getAddressOwnerId(user);
+        Long ownerId = this.addressSecurityService.getAddressOwnerId(user);
 
         Page<Address> page = this.addressService.listAll(pageable, ownerId);
 
         return ApiResponse.dataResponse(page.map(ListAddressDTO::new));
     }
 
+    @Transactional
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN') or @securityService.canUpdate(authentication, #id)")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @addressSecurityService.canAccess(authentication, #id)")
     public ResponseEntity<ApiResponse<ShowAddressDTO>> update(
         @PathVariable Long id,
         @Valid @RequestBody UpdateAddressDTO body
@@ -79,8 +80,9 @@ public class AddressController {
         return ApiResponse.dataResponse(new ShowAddressDTO(address));
     }
 
+    @Transactional
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN') or @securityService.canUpdate(authentication, #id)")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @addressSecurityService.canAccess(authentication, #id)")
     public ResponseEntity<ApiResponse<Void>> delete(
         @PathVariable Long id
     ) {

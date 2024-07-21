@@ -5,17 +5,13 @@ meta {
 }
 
 post {
-  url: http://localhost:8080/addresses?user=5
+  url: http://localhost:8080/addresses
   body: json
   auth: bearer
 }
 
-params:query {
-  user: 5
-}
-
 auth:bearer {
-  token: {{admin_token}}
+  token: {{client_token}}
 }
 
 body:json {

@@ -26,7 +26,7 @@ import java.net.URI;
 public class UserController {
 
     private final UserService userService;
-    private final UserSecurityService securityService;
+    private final UserSecurityService userSecurityService;
 
     @PostMapping
     @Transactional
@@ -35,7 +35,7 @@ public class UserController {
         UriComponentsBuilder uriBuilder
     ) {
         if (body.role() != UserRole.CLIENT) {
-            this.securityService.throwIsNotAdmin(new BadCredentialsException("Only users with role ADMIN can register users with role CASHIER or ADMIN"));
+            this.userSecurityService.throwIsNotAdmin(new BadCredentialsException("Only users with role ADMIN can register users with role CASHIER or ADMIN"));
         }
 
         User user = this.userService.register(body);
@@ -49,7 +49,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN') or @securityService.canAccess(authentication, #id)")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @userSecurityService.canAccess(authentication, #id)")
     public ResponseEntity<ApiResponse<ShowUserDTO>> show(
         @PathVariable Long id
     ) {
@@ -69,7 +69,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     @Transactional
-    @PreAuthorize("hasRole('ROLE_ADMIN') or @securityService.canAccess(authentication, #id)")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @userSecurityService.canAccess(authentication, #id)")
     public ResponseEntity<ApiResponse<ShowUserDTO>> update(
         @PathVariable Long id,
         @Valid @RequestBody UpdateUserDTO body
@@ -81,7 +81,7 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     @Transactional
-    @PreAuthorize("hasRole('ROLE_ADMIN') or @securityService.canAccess(authentication, #id)")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @userSecurityService.canAccess(authentication, #id)")
     public ResponseEntity<Void> delete(
         @PathVariable Long id
     ) {

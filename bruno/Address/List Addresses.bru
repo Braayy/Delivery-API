@@ -1,0 +1,15 @@
+meta {
+  name: List Addresses
+  type: http
+  seq: 3
+}
+
+get {
+  url: http://localhost:8080/addresses
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{client_token}}
+}
