@@ -30,13 +30,13 @@ public class AddressController {
     @PostMapping
     @Transactional
     public ResponseEntity<ApiResponse<ShowAddressDTO>> register(
-        @Valid @RequestBody RegisterAddressDTO registerAddressDTO,
+        @Valid @RequestBody RegisterAddressDTO body,
         @RequestParam(required = false) Long user,
         UriComponentsBuilder uriBuilder
     ) {
         Long ownerId = this.addressSecurityService.getAddressOwnerId(user);
 
-        Address address = this.addressService.register(registerAddressDTO, ownerId);
+        Address address = this.addressService.register(body, ownerId);
 
         URI uri = uriBuilder
             .path("/address/{id}")
