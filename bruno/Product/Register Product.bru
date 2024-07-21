@@ -1,0 +1,26 @@
+meta {
+  name: Register Product
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:8080/products
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{admin_token}}
+}
+
+body:json {
+  {
+    "name": "Podrão",
+    "description": "Pão + Alface + Tomate + 2 Carnes + Ovo + Bacon + Batata Palha + Presunto + Queijo",
+    "imageUrl": "https://cdn.cgn.inf.br/fotos-cgn/2023/05/24165640/WhatsApp-Image-2023-05-16-at-22.14.59.jpeg",
+    "price": 13.00,
+    "quantityType": "UNIT",
+    "maxAdditionals": 0
+  }
+}
