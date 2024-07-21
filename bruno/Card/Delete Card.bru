@@ -1,0 +1,15 @@
+meta {
+  name: Delete Card
+  type: http
+  seq: 5
+}
+
+delete {
+  url: http://localhost:8080/cards/2
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{cashier_token}}
+}

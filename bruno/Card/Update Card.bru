@@ -1,0 +1,21 @@
+meta {
+  name: Update Card
+  type: http
+  seq: 4
+}
+
+put {
+  url: http://localhost:8080/cards/1
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{admin_token}}
+}
+
+body:json {
+  {
+    "nickname": "Nubank FastFood"
+  }
+}
