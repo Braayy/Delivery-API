@@ -1,0 +1,15 @@
+meta {
+  name: Delete Product Group
+  type: http
+  seq: 5
+}
+
+delete {
+  url: http://localhost:8080/product-groups/3
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{admin_token}}
+}

@@ -1,5 +1,6 @@
 package io.github.braayy.delivery.feature.product;
 
+import io.github.braayy.delivery.feature.productgroup.ProductGroup;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,6 +27,11 @@ public class Product {
 
     @Setter
     private String imageUrl;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @Setter
+    @NonNull
+    private ProductGroup group;
 
     @Setter
     @NonNull

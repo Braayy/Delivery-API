@@ -19,6 +19,9 @@ public record RegisterProductDTO(
     String imageUrl,
 
     @NotNull
+    Long group,
+
+    @NotNull
     @PositiveOrZero
     BigDecimal price,
 

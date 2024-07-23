@@ -52,9 +52,10 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<ApiResponse<Page<ListProductDTO>>> list(
         @RequestParam(required = false) String name,
+        @RequestParam(required = false) Long group,
         @PageableDefault Pageable pageable
     ) {
-        Page<Product> page = this.productService.listAll(name, pageable);
+        Page<Product> page = this.productService.listAll(name, group, pageable);
 
         return ApiResponse.dataResponse(page.map(ListProductDTO::new));
     }

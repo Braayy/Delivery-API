@@ -2,6 +2,9 @@ package io.github.braayy.delivery.feature.product;
 
 import io.github.braayy.delivery.feature.product.dto.RegisterProductDTO;
 import io.github.braayy.delivery.feature.product.dto.UpdateProductDTO;
+import io.github.braayy.delivery.feature.productgroup.ProductGroup;
+import io.github.braayy.delivery.feature.productgroup.ProductGroupService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,16 +15,20 @@ import org.springframework.stereotype.Service;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final ProductGroupService productGroupService;
 
     public Product register(RegisterProductDTO dto) {
         if (dto.quantityType() == QuantityType.WEIGHT && dto.weightMultiplier() == null) {
             throw new IllegalArgumentException("Quantity Type was set to WEIGHT, but Weight Multiplier was not set");
         }
 
+        ProductGroup group = this.productGroupService.getById(dto.group());
+
         Product product = Product.builder()
             .name(dto.name())
             .description(dto.description())
             .imageUrl(dto.imageUrl())
+            .group(group)
             .price(dto.price())
             .quantityType(dto.quantityType())
             .weightMultiplier(dto.weightMultiplier())
@@ -32,15 +39,18 @@ public class ProductService {
     }
 
     public Product getById(Long productId) {
+        if (!this.productRepository.existsById(productId)) {
+            throw new EntityNotFoundException("Product with id " + productId + " could not be found");
+        }
+
         return this.productRepository.getReferenceById(productId);
     }
 
-    public Page<Product> listAll(String name, Pageable pageable) {
-        if (name != null && !name.isEmpty()) {
-            return this.productRepository.findByNameIgnoreCaseContaining(name, pageable);
-        }
+    public Page<Product> listAll(String name, Long groupId, Pageable pageable) {
+        ProductGroup group = groupId != null ? this.productGroupService.getById(groupId) : null;
+        System.out.println(name + " " + groupId);
 
-        return this.productRepository.findAll(pageable);
+        return this.productRepository.findByNameContainingIgnoreCaseAndGroup(name, group, pageable);
     }
 
     public Product update(Long productId, UpdateProductDTO dto) {
@@ -56,6 +66,13 @@ public class ProductService {
 
         if (dto.imageUrl() != null) {
             product.setImageUrl(dto.imageUrl());
+        }
+
+
+        if (dto.group() != null) {
+            ProductGroup group = this.productGroupService.getById(dto.group());
+
+            product.setGroup(group);
         }
 
         if (dto.price() != null) {

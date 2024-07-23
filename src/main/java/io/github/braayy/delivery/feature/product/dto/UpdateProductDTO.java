@@ -17,6 +17,8 @@ public record UpdateProductDTO(
     @Size(min = 1)
     String imageUrl,
 
+    Long group,
+
     @PositiveOrZero
     BigDecimal price,
 

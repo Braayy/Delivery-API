@@ -34,7 +34,10 @@ public class SecurityConfiguration {
 
                 .requestMatchers(HttpMethod.GET, "/users").hasRole(UserRole.ADMIN.name())
 
-                .requestMatchers("/products", "/products/**").hasRole(UserRole.ADMIN.name())
+                .requestMatchers(
+                    "/products", "/products/**",
+                    "/product-additionals", "/product-additionals/**"
+                ).hasRole(UserRole.ADMIN.name())
 
                 .anyRequest().authenticated()
             )

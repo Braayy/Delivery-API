@@ -1,0 +1,21 @@
+meta {
+  name: Update User Group
+  type: http
+  seq: 4
+}
+
+put {
+  url: http://localhost:8080/product-groups/2
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{admin_token}}
+}
+
+body:json {
+  {
+    "description": "Mío"
+  }
+}

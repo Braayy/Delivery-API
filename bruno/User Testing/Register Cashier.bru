@@ -1,0 +1,24 @@
+meta {
+  name: Register Cashier
+  type: http
+  seq: 5
+}
+
+post {
+  url: http://localhost:8080/users
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{admin_token}}
+}
+
+body:json {
+  {
+    "name": "Fulano",
+    "email": "fulano@pizzaboa.net",
+    "password": "senha321",
+    "role": "CASHIER"
+  }
+}
